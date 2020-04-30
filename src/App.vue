@@ -8,6 +8,8 @@
       {{ lastEventId }}
       events-list-length
       {{ eventsListLength }}
+      <!-- lastEvent
+      {{ lastEvent }} -->
     </pre>
     <div>
       <tree
@@ -15,7 +17,16 @@
         :data="items"
         :options="options"
         ref="tree"
-      />
+      >
+        <!-- <div slot-scope="{ node }" class="node-container"> -->
+          <!-- <div class="node-text">{{ node.text }}</div> -->
+          <!-- <div class="node-controls"> -->
+            <!-- <a href="#" @mouseup.stop="editNode(node)">Edit</a>
+            <a href="#" @mouseup.stop="removeNode(node)">Remove</a> -->
+            <!-- <a href="#" @mouseup.stop="addChildNode(node)">Add child</a> -->
+          <!-- </div> -->
+        <!-- </div> -->
+      </tree>
     </div>
   </div>
 </template>
@@ -85,6 +96,7 @@ export default {
     },
     lastEventId() {
       return (this.lastEvent || {}).id || 'unknown'
+      // return (this.lastEvent.data || {}).id || 'unknown'
     },
       // return (this.events[lastElement] || {}).name || ''
     // lastEventName() {
@@ -107,24 +119,41 @@ export default {
     }
   },
   methods: {
+    // addChildNode(node) {
+    //   if (node.enabled()) {
+    //     node.append('New Node')
+    //   }
+    // },
     expandedCheck(id) {
       console.log('id ', id)
-      // this.items = dataTwo
-      // this.$refs.tree.updateData({ id: id}, node => {
+      // this.$refs.tree.updateData({ data: { id: id}}, node => {
       //   console.log('node ', node)
       //   return { text: 'New Item!' }
       // })
-      this.$refs.tree.updateData('Item 1', node => {
-        console.log('node ', node)
-        return { text: 'New Item!' }
-      })
-      // this.$refs.tree.updateData({id: id}, node => {
+      // this.$refs.tree.updateData({ data: { id: id}}, node => {
       //   console.log('node ', node)
-      //   return { text: 'New Item! 3' }
+      //   return { text: 'New Item!' }
       // })
-      const node = this.lastEvent.node
-      // let selectedNodeToAppendTo = this.$refs.tree.findAll({id: 32})
-      node.append({ text: 'item 3.3', id: 33 })
+      // const node = this.lastEvent.node
+      // let selectedNodeToAppendTo = this.$refs.tree.findAll({ data: {icon: 32}})
+      let selectedNodeToAppendTo = this.$refs.tree.find({ data: {id: 3}})[0]
+      console.log('selected node ', selectedNodeToAppendTo)
+      // this.addChildNode(selectedNodeToAppendTo)
+      // this.$refs.tree.append(
+      //   {data: {id: 3}},
+      //   'item 3'
+      // )
+      // this.$refs.tree = this.$refs.tree.append(
+      //   { text: 'Item 1' },              // search criteria
+      //   'New CHILD Node for "My super Text"'    // this string will be converted to Node object with default state parameters
+      // )
+      if (!(this.$refs.tree.find({ data: {id: 33}}).length > 0)) {
+        selectedNodeToAppendTo.append(
+        { 
+          text: 'item 3.3',
+          data: { id: 33 }
+        })
+      }
       // let selection = this.$refs.tree.findAll({ state: { expanded: true } })
       // selection.toggleCollapse
     },
@@ -141,7 +170,8 @@ export default {
         }
 
         if (targetNode && targetNode.id) {
-          nodeId = targetNode.id
+          // nodeId = targetNode.id
+          nodeId = (targetNode.data || {}).id
         }
 
         events.push(
