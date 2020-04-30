@@ -154,6 +154,10 @@ export default {
           data: { id: 33 }
         })
       }
+      if (this.$refs.tree.find({ data: {id: 2}}).length > 0) {
+        console.log("this remove happened")
+        this.$refs.tree.find({data: {id: 2}})[0].remove()
+      }
       // let selection = this.$refs.tree.findAll({ state: { expanded: true } })
       // selection.toggleCollapse
     },
