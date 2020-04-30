@@ -24,29 +24,8 @@
 <script>
 import { dataOne } from '../data/items-one.js'
 const eventsList = [
-  // { name: 'tree:mounted', args: ['Tree Component'] },
-  // { name: 'tree:filtered', args: ['Matches', 'Filter String'] },
-  // { name: 'tree:data:fetch', args: ['Parent Node'] },
-  // { name: 'tree:data:received', args: ['Parent Node'] },
-
-  // { name: 'node:clicked', args: ['Node']},
-  // { name: 'node:disabled', args: ['Node']},
-  // { name: 'node:enabled', args: ['Node']},
-  // { name: 'node:shown', args: ['Node'] },
-  // { name: 'node:hidden', args: ['Node'] },
-  // { name: 'node:dblclick', args: ['Node'] },
-  // { name: 'node:selected', args: ['Node'] },
-  // { name: 'node:unselected', args: ['Node'] },
-  // { name: 'node:checked', args: ['Node'] },
-  // { name: 'node:unchecked', args: ['Node'] },
   { name: 'node:expanded', args: ['Node'] },
-  { name: 'node:collapsed',  args: ['Node'] },
-  // { name: 'node:added',  args: ['Node', 'New Node'] },
-  // { name: 'node:removed',  args: ['Node'] },
-  // { name: 'node:text:changed', args: ['Node', 'New Text', 'Old Text']},
-
-  // { name: 'node:editing:start',  args: ['Node'] },
-  // { name: 'node:editing:stop',  args: ['Node', 'isTextChanged'] },
+  { name: 'node:collapsed',  args: ['Node'] }
 ]
 
 export default {
