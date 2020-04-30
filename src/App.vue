@@ -22,6 +22,12 @@
 </template>
 
 <script>
+/**
+ * this jsfiddle proved particularly helpful
+ * 
+ * https://jsfiddle.net/amsik/cuseo1j7/?utm_source=website&utm_medium=embed&utm_campaign=cuseo1j7
+ * 
+ */
 import { dataOne } from '../data/items-one.js'
 const eventsList = [
   { name: 'node:expanded', args: ['Node'] },
