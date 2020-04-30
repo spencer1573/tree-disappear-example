@@ -23,7 +23,6 @@
 
 <script>
 import { dataOne } from '../data/items-one.js'
-// import { dataTwo } from '../data/items-two.js'
 const eventsList = [
   // { name: 'tree:mounted', args: ['Tree Component'] },
   // { name: 'tree:filtered', args: ['Matches', 'Filter String'] },
@@ -137,7 +136,6 @@ export default {
         }
 
         if (targetNode && targetNode.id) {
-          // nodeId = targetNode.id
           nodeId = (targetNode.data || {}).id
         }
 
