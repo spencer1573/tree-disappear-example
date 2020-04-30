@@ -16,6 +16,9 @@
         :options="options"
         ref="tree"
       >
+      <div slot-scope="{ node }" class="node-container">
+        <div class="node-text">{{ node.text }} - id === {{ node.data.id }}</div>
+      </div>
       </tree>
     </div>
   </div>
