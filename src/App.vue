@@ -8,8 +8,6 @@
       {{ lastEventId }}
       events-list-length
       {{ eventsListLength }}
-      <!-- lastEvent
-      {{ lastEvent }} -->
     </pre>
     <div>
       <tree
@@ -18,14 +16,6 @@
         :options="options"
         ref="tree"
       >
-        <!-- <div slot-scope="{ node }" class="node-container"> -->
-          <!-- <div class="node-text">{{ node.text }}</div> -->
-          <!-- <div class="node-controls"> -->
-            <!-- <a href="#" @mouseup.stop="editNode(node)">Edit</a>
-            <a href="#" @mouseup.stop="removeNode(node)">Remove</a> -->
-            <!-- <a href="#" @mouseup.stop="addChildNode(node)">Add child</a> -->
-          <!-- </div> -->
-        <!-- </div> -->
       </tree>
     </div>
   </div>
@@ -96,12 +86,7 @@ export default {
     },
     lastEventId() {
       return (this.lastEvent || {}).id || 'unknown'
-      // return (this.lastEvent.data || {}).id || 'unknown'
-    },
-      // return (this.events[lastElement] || {}).name || ''
-    // lastEventName() {
-    //   return this.lastEventRaw
-    // }
+    }
   },
   mounted () {
     eventsList.forEach(e => {
@@ -119,34 +104,13 @@ export default {
     }
   },
   methods: {
-    // addChildNode(node) {
-    //   if (node.enabled()) {
-    //     node.append('New Node')
-    //   }
-    // },
     expandedCheck(id) {
-      console.log('id ', id)
-      // this.$refs.tree.updateData({ data: { id: id}}, node => {
-      //   console.log('node ', node)
-      //   return { text: 'New Item!' }
-      // })
-      // this.$refs.tree.updateData({ data: { id: id}}, node => {
-      //   console.log('node ', node)
-      //   return { text: 'New Item!' }
-      // })
-      // const node = this.lastEvent.node
-      // let selectedNodeToAppendTo = this.$refs.tree.findAll({ data: {icon: 32}})
+
+      console.log('id you would use to know which one to add to? ', id)
+
+      // THIS ADDS A NODE
       let selectedNodeToAppendTo = this.$refs.tree.find({ data: {id: 3}})[0]
       console.log('selected node ', selectedNodeToAppendTo)
-      // this.addChildNode(selectedNodeToAppendTo)
-      // this.$refs.tree.append(
-      //   {data: {id: 3}},
-      //   'item 3'
-      // )
-      // this.$refs.tree = this.$refs.tree.append(
-      //   { text: 'Item 1' },              // search criteria
-      //   'New CHILD Node for "My super Text"'    // this string will be converted to Node object with default state parameters
-      // )
       if (!(this.$refs.tree.find({ data: {id: 33}}).length > 0)) {
         selectedNodeToAppendTo.append(
         { 
@@ -154,12 +118,11 @@ export default {
           data: { id: 33 }
         })
       }
+      // THIS REMOVES A NODE
       if (this.$refs.tree.find({ data: {id: 2}}).length > 0) {
         console.log("this remove happened")
         this.$refs.tree.find({data: {id: 2}})[0].remove()
       }
-      // let selection = this.$refs.tree.findAll({ state: { expanded: true } })
-      // selection.toggleCollapse
     },
     initEventViewer(event) {
       const events = this.events
@@ -188,14 +151,6 @@ export default {
       }
     }
   }
-  // mounted: () => {
-    // setTimeout(() => {
-    //   this.$refs.tree.updateData('Item 1', node => {
-    //     console.log('node ', node)
-    //     return { text: 'New Item!' }
-    //   });
-    // }, 1000)
-  // }
 }
 </script>
 
