@@ -1,6 +1,5 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+  <div>
     <pre>
       last-Action
       {{ lastEventAction }}
@@ -16,44 +15,38 @@
         :options="options"
         ref="tree"
       >
-      <div slot-scope="{ node }" class="node-container">
-        <div class="node-text">{{ node.text }} - id === {{ node.data.id }}</div>
-      </div>
+        <div slot-scope="{ node }" class="node-container">
+          <div class="node-text">{{ node.text }}</div>
+        </div>
       </tree>
     </div>
   </div>
 </template>
 
 <script>
-/**
- * this jsfiddle proved particularly helpful
- * 
- * https://jsfiddle.net/amsik/cuseo1j7/?utm_source=website&utm_medium=embed&utm_campaign=cuseo1j7
- * 
- */
-import { dataOne } from '../data/items-one.js'
+import { API } from '../api'
+// import { dataOne } from '../data/items-one' //  ../utils/storage'
+const api = new API()
+
 const eventsList = [
   { name: 'node:expanded', args: ['Node'] },
-  { name: 'node:collapsed',  args: ['Node'] }
+  { name: 'node:collapsed', args: ['Node'] },
 ]
 
 export default {
-  name: 'App',
+  name: 'DisplayChildren',
+  props: ['initialParentId'],
   data: () => {
     return {
       // items: dataOne,
       lastEventName: '',
       events: [],
-      items: dataOne,
-      treeData: [
-        { text: 'Item 1' },
-        { text: 'Item 2' },
-        { text: 'Item 3', state: { selected: true } },
-        { text: 'Item 4' }
-      ],
-      options: {
-        checkbox: true
-      }
+      items: [],
+      treeData: [],
+
+      children: [],
+
+      options: {},
     }
   },
   computed: {
@@ -66,19 +59,24 @@ export default {
     },
     lastEvent() {
       const lastElement = this.events.length - 1
-      return (this.events[lastElement] || {})
+      return this.events[lastElement] || {}
     },
     lastEventAction() {
       return (this.lastEvent || {}).name || ''
     },
     lastEventId() {
       return (this.lastEvent || {}).id || 'unknown'
-    }
+    },
   },
-  mounted () {
-    eventsList.forEach(e => {
+  mounted() {
+    eventsList.forEach((e) => {
       this.$refs.tree.$on(e.name, this.initEventViewer(e))
     })
+
+    this.getChildren(this.initialParentId)
+    this.formatDataForTree()
+    console.log('☎️')
+    console.log(this.children)
   },
   watch: {
     eventsListLength: {
@@ -87,34 +85,94 @@ export default {
           this.expandedCheck(this.lastEventId)
         }
       },
-      immediate: true
-    }
+      immediate: true,
+    },
   },
   methods: {
-    expandedCheck(id) {
+    getChildren(parent_id) {
+      api
+        .get_child_fields(parent_id)
+        .then((response) => {
+          const children = response.data
+          // children.forEach(child => this.children.push(child));
+          this.children = children
+        })
+        .catch((error) => {
+          console.log(error)
+        })
+    },
 
+    formatDataForTree() {
+      console.log('🧬')
+      console.log(this.children)
+
+      let arrayLength = this.children.length
+
+      console.log('💜')
+      console.log(arrayLength)
+
+      console.log('🎯' + arrayLength)
+
+      for (let i = 0; i < arrayLength; i++) {
+        console.log('🚣‍♂️')
+        // console.log(Object.keys(this.children[i]))
+      }
+
+      // var childrenArray[];
+
+      // this.children.forEach(child => {
+      //
+      //    console.log("🥇");
+      //    childrenArray.push({text: child.name });
+      //
+      // });
+
+      console.log('🇨🇱')
+      // console.log(childrenArray);
+
+      // var title = [];
+      //
+      // for (var i=0; i<3; i++) {
+      // title[i] = {
+      //     name: "name" + i+1,
+      //     age: "age" + i+1,
+      //     hometown: "hometown" + i+1
+      //     };
+      // }
+      //
+      //
+      // const x = {text: "Lorem"};
+      // const y = {text: "Ipsum"};
+      // const z = {text: "Sit"};
+      //
+      // // const childrenArray = [x,y,z];
+      //
+      // console.log("🧧")
+      //childrenArray.forEach(element => this.items.push(element));
+    },
+
+    expandedCheck(id) {
       console.log('id you would use to know which one to add to? ', id)
 
       // THIS ADDS A NODE
-      let selectedNodeToAppendTo = this.$refs.tree.find({ data: {id: 3}})[0]
+      let selectedNodeToAppendTo = this.$refs.tree.find({ data: { id: 3 } })[0]
       console.log('selected node ', selectedNodeToAppendTo)
-      if (!(this.$refs.tree.find({ data: {id: 33}}).length > 0)) {
-        selectedNodeToAppendTo.append(
-        { 
+      if (!(this.$refs.tree.find({ data: { id: 33 } }).length > 0)) {
+        selectedNodeToAppendTo.append({
           text: 'item 3.3',
-          data: { id: 33 }
+          data: { id: 33 },
         })
       }
       // THIS REMOVES A NODE
-      if (this.$refs.tree.find({ data: {id: 2}}).length > 0) {
-        console.log("this remove happened")
-        this.$refs.tree.find({data: {id: 2}})[0].remove()
+      if (this.$refs.tree.find({ data: { id: 2 } }).length > 0) {
+        console.log('this remove happened')
+        this.$refs.tree.find({ data: { id: 2 } })[0].remove()
       }
     },
     initEventViewer(event) {
       const events = this.events
-    
-      return function (node, newNode) {
+
+      return function(node, newNode) {
         let nodeText = '-'
         let nodeId = '-'
         let targetNode = newNode && newNode.text ? newNode : node
@@ -128,15 +186,16 @@ export default {
         }
 
         events.push(
-          Object.assign(
-            {},
-            event,
-            { time: new Date, nodeText, id: nodeId, node: node }
-          )
+          Object.assign({}, event, {
+            time: new Date(),
+            nodeText,
+            id: nodeId,
+            node: node,
+          })
         )
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
