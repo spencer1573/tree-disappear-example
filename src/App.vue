@@ -1,12 +1,18 @@
 <template>
   <div>
-    <pre>
+    <!-- <pre>
       last-Action
       {{ lastEventAction }}
       last-Id
       {{ lastEventId }}
       events-list-length
       {{ eventsListLength }}
+    </pre> -->
+    <pre>
+      <!-- children
+      {{ children }} -->
+      items
+      {{ items }}
     </pre>
     <div>
       <tree
@@ -24,7 +30,7 @@
 </template>
 
 <script>
-import { API } from '../api'
+import { API } from './api/api'
 // import { dataOne } from '../data/items-one' //  ../utils/storage'
 const api = new API()
 
@@ -41,7 +47,12 @@ export default {
       // items: dataOne,
       lastEventName: '',
       events: [],
-      items: [],
+      items: [
+        // { 
+        //   text: 'unpopulated 1',
+        //   data: { id: 1 }
+        // }
+      ],
       treeData: [],
 
       children: [],
@@ -68,15 +79,25 @@ export default {
       return (this.lastEvent || {}).id || 'unknown'
     },
   },
-  mounted() {
+  async mounted() {
+    this.$nextTick(() => {
+      this.placeInitialRecord()
+    })
+
     eventsList.forEach((e) => {
       this.$refs.tree.$on(e.name, this.initEventViewer(e))
     })
+    this.children = await this.getChildren(this.initialParentId)
+    // this.children = (async function main() {
+    //   try {
 
-    this.getChildren(this.initialParentId)
-    this.formatDataForTree()
+    //   } catch (err) {
+    //     // handle error
+    //   }
+    // })()
+    // this.formatDataForTree()
     console.log('☎️')
-    console.log(this.children)
+    console.log('children ', this.children)
   },
   watch: {
     eventsListLength: {
@@ -89,17 +110,41 @@ export default {
     },
   },
   methods: {
-    getChildren(parent_id) {
-      api
-        .get_child_fields(parent_id)
-        .then((response) => {
-          const children = response.data
-          // children.forEach(child => this.children.push(child));
-          this.children = children
-        })
-        .catch((error) => {
-          console.log(error)
-        })
+    async getChildren(parent_id) {
+      // let children
+      // return new Promise((resolve, reject) => {
+      //   const api = api
+      //     .get_child_fields(parent_id)
+      //     .then((response) => {
+      //       let children = JSON.parse(JSON.stringify(response.data))
+      //       return children
+      //     })
+      //     .catch((error) => {
+      //       console.log(error)
+      //       reject(error)
+      //     })
+      //   console.log('api')
+      //   resolve(api)
+      // })
+      try {
+        const response = await api.get_child_fields(parent_id)
+        return Promise.resolve(JSON.parse(JSON.stringify(response)))
+      } catch (err) {
+        return err
+      }
+      //   .then((response) => {
+      //     let children = JSON.parse(JSON.stringify(response.data))
+      //     return children
+      //   })
+      //   .catch((error) => {
+      //     console.log(error)
+      //     reject(error)
+      //   })
+      // console.log('api')
+      // resolve(api)
+      // })
+
+      // return Promise.resolved(children)
     },
 
     formatDataForTree() {
@@ -149,6 +194,47 @@ export default {
       //
       // console.log("🧧")
       //childrenArray.forEach(element => this.items.push(element));
+    },
+
+    placeInitialRecord() {
+      
+    // eslint-disable-next-line
+      const record = 'something'
+ 
+      // this.$refs.tree.append('something')
+
+      // const selectedNodeToAppendTo = this.$refs.tree.find({yyp data: { id: 1 } })[0]
+      // const selectedNodeToAppendTo = this.$refs.tree.findAll({text: 'unpopulated'})
+      let selectedNodeToAppendTo = this.$refs.tree.find({ data: { id: 1 } })[0]
+      // let selectedNodeToAppendTo = this.$refs.tree.unchecked()
+
+      console.log('selected node ', selectedNodeToAppendTo)
+
+      // selectedNodeToAppendTo.updateData('updated')
+
+      this.$refs.tree.updateData('unpopulated 1', node => {
+        node.select();
+        return { text: 'Item 2' };
+      });
+
+      this.$refs.tree.append({
+        text: 'My NEW Node',
+        state: { selected: true }
+      })
+      // this.$refs.tree.updateData(selectedNodeToAppendTo, node => {
+      //   node.select();
+      //   return { text: 'item 2'}
+      // })
+
+      // let selectedNodeToAppendTo = this.$refs.tree.find({ data: { id: 3 } })[0]
+      // console.log('selected node ', selectedNodeToAppendTo)
+      // if (!(this.$refs.tree.find({ data: { id: 33 } }).length > 0)) {
+      //   selectedNodeToAppendTo.append({
+      //     text: 'item 3.3',
+      //     data: { id: 33 },
+      //   })
+      // }
+      
     },
 
     expandedCheck(id) {

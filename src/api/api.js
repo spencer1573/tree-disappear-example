@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { API_ROOT } from './urls'
+import { API_ROOT } from '../urls'
 import forEach from 'lodash/forEach'
-import store from './store'
+import store from '../store/store'
 
 export class API {
   findOne(collection, filter) {
@@ -135,8 +135,23 @@ export class API {
     /* return the children (entire fields) of children of their parent whose id
        is parent_id and are contained in the medical record root_id
     */
-    const url = '${API_ROOT}/${root_id}/${parent_id}/get_children'
-    return axios.get(url)
+    // const url = '${API_ROOT}/${root_id}/${parent_id}/get_children'
+    return axios.get('https://jsonplaceholder.typicode.com/users')
+    // return axios.get('https://jsonplaceholder.typicode.com/todos/1')
+
+    // const response = {
+    //   data: [
+    //     {
+    //       text: 'Item 3.1',
+    //       data: { id: 31 },
+    //     },
+    //     {
+    //       text: 'Item 3.2',
+    //       data: { id: 32 },
+    //     },
+    //   ],
+    // }
+    // return response
   }
   async updateIndex(index, index_id) {
     if (!index_id) {
