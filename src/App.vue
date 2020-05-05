@@ -88,16 +88,31 @@ export default {
       // this.$refs.tree.updateDataTwo = (arg) => {
       //   console.log('arg happened ', arg)
       // }
-      this.$refs.tree.updateData = (criteria, callback, dataId) => {
-        const nodes = this.$refs.tree.find(criteria);
 
-        nodes.forEach((node) => {
-          node.data = { id: dataId }
-          node.setData(callback(node))
-        }) 
+      ////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////
+      // 
+      //                  SUPER COOL CODE THAT 
+      //          WRITES OVER the - "updateData" function
+      //
+      ////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////
 
-        return nodes;
-      }
+      // this.$refs.tree.updateData = (criteria, callback) => {
+      //   const nodes = this.$refs.tree.findAll(criteria);
+
+      //   nodes.forEach((node) => {
+      //     console.log('node ', node)
+      //     // node.data = { id: node.data.id }
+      //     node.setData(callback(node))
+      //   }) 
+
+      //   return nodes;
+      // }
+      ////////////////////////////////////////////////////////
+      ////////////////////////////////////////////////////////
+
+
     })
 
     eventsList.forEach((e) => {
@@ -128,11 +143,14 @@ export default {
   methods: {
     updateAttempt() {
       // this.$refs.tree.updateData('My NEW Node')
-      this.$refs.tree.updateData('My NEW Node', node => {
+      this.$refs.tree.updateData({ id: 'id-1' }, node => {
         node.select();
 
-        return { text: 'Item 2' };
-      }, 'id-2');
+        return { 
+          text: 'Item 2',
+          id: 'id-3'
+        }
+      });
       
     },
     async getChildren(parent_id) {
@@ -224,26 +242,22 @@ export default {
     placeInitialRecord() {
       
     // eslint-disable-next-line
-      const record = 'something'
+      // const record = 'something'
  
-      // this.$refs.tree.append('something')
 
-      // const selectedNodeToAppendTo = this.$refs.tree.find({yyp data: { id: 1 } })[0]
-      // const selectedNodeToAppendTo = this.$refs.tree.findAll({text: 'unpopulated'})
-      let selectedNodeToAppendTo = this.$refs.tree.find({ data: { id: 1 } })[0]
-      // let selectedNodeToAppendTo = this.$refs.tree.unchecked()
+      // let selectedNodeToAppendTo = this.$refs.tree.find({ data: { id: 1 } })[0]
 
-      console.log('selected node ', selectedNodeToAppendTo)
+      // console.log('selected node ', selectedNodeToAppendTo)
 
-      // selectedNodeToAppendTo.updateData('updated')
 
-      this.$refs.tree.updateData('unpopulated 1', node => {
-        node.select();
-        return { text: 'Item 2' };
-      });
+      // this.$refs.tree.updateData('unpopulated 1', node => {
+      //   node.select();
+      //   return { text: 'Item 2' };
+      // });
 
       this.$refs.tree.append({
         text: 'My NEW Node',
+        id: 'id-1',
         state: { selected: true }
       })
       // this.$refs.tree.updateData(selectedNodeToAppendTo, node => {
