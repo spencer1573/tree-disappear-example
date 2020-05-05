@@ -23,8 +23,10 @@
       >
         <div slot-scope="{ node }" class="node-container">
           <div class="node-text">{{ node.text }}</div>
+          <div class="node-text">dataid = {{ node.data.id }}</div>
         </div>
       </tree>
+      <button @click="updateAttempt()">click me</button>
     </div>
   </div>
 </template>
@@ -82,6 +84,20 @@ export default {
   async mounted() {
     this.$nextTick(() => {
       this.placeInitialRecord()
+      // THIS WORKS! 
+      // this.$refs.tree.updateDataTwo = (arg) => {
+      //   console.log('arg happened ', arg)
+      // }
+      this.$refs.tree.updateData = (criteria, callback, dataId) => {
+        const nodes = this.$refs.tree.find(criteria);
+
+        nodes.forEach((node) => {
+          node.data = { id: dataId }
+          node.setData(callback(node))
+        }) 
+
+        return nodes;
+      }
     })
 
     eventsList.forEach((e) => {
@@ -110,6 +126,15 @@ export default {
     },
   },
   methods: {
+    updateAttempt() {
+      // this.$refs.tree.updateData('My NEW Node')
+      this.$refs.tree.updateData('My NEW Node', node => {
+        node.select();
+
+        return { text: 'Item 2' };
+      }, 'id-2');
+      
+    },
     async getChildren(parent_id) {
       // let children
       // return new Promise((resolve, reject) => {
