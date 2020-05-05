@@ -22,9 +22,12 @@
         ref="tree"
       >
         <div slot-scope="{ node }" class="node-container">
-          <div class="node-text">{{ node.text }}</div>
-          <div class="node-text">dataid = {{ node.data.id }}</div>
-        </div>
+          <div class="node-text">{{ node.id }}</div>
+          <!-- <div class="node-id">{{ node.id }}</div> -->
+          <div class="node-controls">
+            <a href="#" @mouseup.stop="editNode(node)">Edit</a>
+          </div>
+        </div>                
       </tree>
       <button @click="updateAttempt()">click me</button>
     </div>
@@ -141,6 +144,10 @@ export default {
     },
   },
   methods: {
+    editNode(node, e) {
+      console.log('e ', e)
+      node.startEditing()
+    },
     updateAttempt() {
       // this.$refs.tree.updateData('My NEW Node')
       this.$refs.tree.updateData({ id: 'id-1' }, node => {
